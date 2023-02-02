@@ -1,0 +1,21 @@
+{
+  "targets": {
+    "joannamae-991f2": {
+      "hosting": {
+        "atento": [
+          "joannamae-991f2"
+        ]
+      }
+    },
+    "joannamae-6f651": {
+      "hosting": {
+        "atento": [
+          "joannamae-6f651"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "joannamae-6f651"
+  }
+}

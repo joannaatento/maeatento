@@ -1,0 +1,34 @@
+<body>
+
+    <div class="container">
+        <div class="wrapper">
+          
+          <div class="title"><span>Signup</span></div>
+          <form #LoginForm="ngForm" (ngSubmit)="registerUser(LoginForm.value)">
+            <div class="row">
+         
+              <input type="text" ngModel id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="row"><br>
+          
+              <input type="text" ngModel id="email" name="email" placeholder="Email" required>
+            </div>
+  
+            <div class="row"><br><br>
+          
+              <input type="password" ngModel id="password" name="password" placeholder="Password" required>
+            </div>
+         
+            <div class="row button"><br><br><br>
+  
+              <span class="psw">Already have an account? <a routerLink="/login">Login</a></span>
+              <br><br><br>
+              <input type="submit" id="saveData" name="signup_submit" value="Sign Up" />
+  
+            </div>
+            <br>  <br> <br><br><br><br>
+          </form>
+        </div>
+      </div>
+  
+    </body>
