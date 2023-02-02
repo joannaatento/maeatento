@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
-import { Database, set, ref, update } from '@angular/fire/database';
+import { Database, set, ref} from '@angular/fire/database';
 
 @Component({
   selector: 'app-register',

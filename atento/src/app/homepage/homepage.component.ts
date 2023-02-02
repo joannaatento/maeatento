@@ -1,6 +1,6 @@
 import { Component} from '@angular/core';
-import { Auth, signInWithEmailAndPassword} from '@angular/fire/auth';
-import { Database, ref, update } from '@angular/fire/database';
+import { Auth } from '@angular/fire/auth';
+import { Database} from '@angular/fire/database';
 import { Router } from '@angular/router';
 
 @Component({
