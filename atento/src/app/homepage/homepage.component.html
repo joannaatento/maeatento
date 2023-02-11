@@ -1,1 +1,13 @@
-<h1>Welcome to my life!!</h1>
+<div *ngFor="let u of users | async">
+    <div *ngIf= "u">
+        <div class="card 1">
+            <div class="card_title title-white">
+              <p class="p-title">Username: {{u.username}}</p>  
+              <p>Password: {{u.password}}</p>
+              <button (click)="del(u.username)">Delete</button>
+              <button (click)="fillForm(u.username)">update</button>
+            </div>
+          </div>
+        </div>
+
+</div>
