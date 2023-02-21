@@ -1,10 +1,17 @@
-import { Component, OnInit} from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { Auth } from '@angular/fire/auth';
-import { Database,ref, update, remove} from '@angular/fire/database';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { AngularFireList, AngularFireDatabase } from '@angular/fire/compat/database';
+import { Database, ref, set, update, remove,query,orderByChild,equalTo} from '@angular/fire/database';
+import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
+import { getDatabase, onValue} from "firebase/database";
 import { Observable } from 'rxjs';
+
+
+
+interface Item {
+  password: string;
+}
+
 
 @Component({
   selector: 'app-homepage',
@@ -14,8 +21,8 @@ import { Observable } from 'rxjs';
 export class HomepageComponent implements OnInit {
 
   users!: Observable<any[]>;
-  constructor(public auth: Auth,public database: Database, private db: AngularFireDatabase,private router:Router) {
-    this.users = db.list('/users').valueChanges();
+  constructor(public database: Database, private db: AngularFireDatabase) {
+  this.users = db.list('/users').valueChanges();
    }
    
   ngOnInit(): void {
@@ -31,7 +38,7 @@ export class HomepageComponent implements OnInit {
 
    update(value:any){
  
-    update(ref(this.database, 'users/' + value.username), {
+    update(ref(this.database, 'users/' + value.email), {
        password: value.password
      }); 
     alert('User updated!');
@@ -39,9 +46,9 @@ export class HomepageComponent implements OnInit {
   }
 
 
-  username = '';
-  fillForm(username: any) {
-    this.username = username;
+  email = '';
+  fillForm(email: any) {
+    this.email = email;
   }
 
 
@@ -49,4 +56,12 @@ export class HomepageComponent implements OnInit {
   password: any;
   itemId: any;
 
-}
+ 
+  }
+
+ 
+
+
+
+
+  
