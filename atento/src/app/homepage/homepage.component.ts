@@ -39,6 +39,7 @@ export class HomepageComponent implements OnInit {
    update(value:any){
  
     update(ref(this.database, 'users/' + value.email), {
+
        password: value.password
      }); 
     alert('User updated!');

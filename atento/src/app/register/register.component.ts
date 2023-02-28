@@ -22,7 +22,8 @@ export class RegisterComponent {
 
         set(ref(this.database, 'users/' + user.uid), {
           email: value.email,
-          password: value.password
+          password: value.password,
+          id: user.uid
         });
 
         alert('user created! ');
