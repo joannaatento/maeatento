@@ -1,7 +1,9 @@
 import { Component, OnInit} from '@angular/core';
 import { Auth, signInWithEmailAndPassword} from '@angular/fire/auth';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Database, ref, update,onValue, remove} from '@angular/fire/database';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -10,49 +12,55 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit{
 
-  constructor(public auth: Auth,public database:Database,private router:Router) { }
-
+  users!: Observable<any[]>;
+  constructor(public auth: Auth,public database: Database, private db: AngularFireDatabase,private router:Router) {
+    this.users = db.list('/users').valueChanges();
+   }
+   
   ngOnInit(): void {
+
+
   }
 
   loginUser(value: any) {
 
     //login 
-         signInWithEmailAndPassword(this.auth, value.email, value.password)
+       signInWithEmailAndPassword(this.auth, value.email, value.password)
         .then((userCredential) => {
       
-          const user = userCredential.user;
+         const user = userCredential.user;
 
-          alert('user login');
+         alert('user login');
           const date = new Date();
           update(ref(this.database, 'users/' + user.uid), {
 
-          last_login: date
-        });
+         last_login: date
+       });
 
        this.router.navigate(['/signup'])
       
-    },err=>{
+  },err=>{
      alert(err.message)
   
    })
       
-     .catch((error) => {
-       const errorCode = error.code;
-       const errorMessage = error.message;
-     });
+    .catch((error) => {
+     const errorCode = error.code;
+     const errorMessage = error.message;
+    });
+
     //read user
 
-     // const starCountRef = ref(this.database, 'users/' + value.email);
-      //onValue(starCountRef, (snapshot) => {
+    //  const starCountRef = ref(this.database, 'users/' + value.email);
+     // onValue(starCountRef, (snapshot) => {
       //const data = snapshot.val();
    
-      //alert(data.email);
+     // alert(data.email);
    
       //update user
 
 //update(ref(this.database, 'users/' + value.email), {
-// password: value.password
+//password: value.password
 //});
 //alert('password updated!');
 
