@@ -29,40 +29,33 @@ export class HomepageComponent implements OnInit {
 
 
   }
-
-
   del(value: any){
     remove(ref(this.database, 'users/' + value));
     alert('Deleted Successfully')
   }
-
-   update(value:any){
- 
-    update(ref(this.database, 'users/' + value.email), {
-
-       password: value.password
-     }); 
-    alert('User updated!');
-      
-  }
-
-
-  email = '';
-  fillForm(email: any) {
-    this.email = email;
-  }
-
-
-
-  password: any;
-  itemId: any;
-
- 
-  }
-
- 
-
-
-
-
+  email = "";
+password = "";
+     edit(z: any) {
+       this.email = z.email;
+      this.password = z.password;
+     }
   
+     update(value:any){
+
+   if(value.password == ""){
+    alert('put the new password!');
+   }else{
+    update(ref(this.database, 'users/' + value.email), {
+      password: value.password
+    }); 
+    this.email = "";
+    this.password = "";
+   alert('User updated!');
+     
+   }
+    }
+ 
+ 
+
+
+}

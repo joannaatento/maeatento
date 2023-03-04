@@ -1,4 +1,42 @@
-<input type="text" ngModel id="email" [(ngModel)]="email" placeholder ="Change Email" name ="email">
+<div class="container middle">
+  <button class="lipat" routerLink="/register">Sign Up</button>
+  
+  <button class="lipat" routerLink="/login">Login</button>
+<br>
+<form  #updateform="ngForm" (ngSubmit)="update(updateform.value)">
+  <input type="text" ngModel id="email" hidden  [(ngModel)]="email" placeholder ="Change Email" name ="email">
+<input type="password" ngModel id="password" placeholder ="New Password"  [(ngModel)]="password" name ="password">
+<input type="submit" id="saveData" name ="Submit" value="Update Password">
+</form>
+  </div>
+
+<div class="box">
+  <table class="table table-bordered table-dark">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Email</th>
+      <th scope="col">name</th>
+      <th scope="col">password</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let z of users | async;let i = index">
+    <tr class="high" *ngIf= "z"  (click)="edit(z)" >
+      <th  scope="row"  > {{i+1}}</th>
+      <td>{{z.email}}</td>
+      <td>{{z.name}}</td>
+      <td>{{z.password}}</td>
+      <td  class="high"><button class="btn-primary" (click)="edit(z) ">edit</button> <button  class="btn-danger" (click)="del(z.email)">Delete</button></td>
+    </tr>
+
+
+  </tbody>
+</table>
+</div>
+
+
+<!-- <input type="text" ngModel id="email" [(ngModel)]="email" placeholder ="Change Email" name ="email">
 <input type="password" ngModel id="password" placeholder ="New Password" name ="password">
 <input type="submit" id="saveData" name ="Submit" value="Update Password">
 
@@ -15,4 +53,4 @@
         </div>
 
 </div>
-
+ -->
