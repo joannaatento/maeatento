@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireList, AngularFireDatabase } from '@angular/fire/compat/database';
 import { Database, ref, set, update, remove,query,orderByChild,equalTo} from '@angular/fire/database';
-import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
-import { getDatabase, onValue} from "firebase/database";
 import { Observable } from 'rxjs';
 
 
@@ -35,9 +33,9 @@ export class HomepageComponent implements OnInit {
   }
   email = "";
 password = "";
-     edit(z: any) {
-       this.email = z.email;
-      this.password = z.password;
+     edit(edits: any) {
+       this.email = edits.email;
+      this.password = edits.password;
      }
   
      update(value:any){
