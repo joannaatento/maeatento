@@ -1,18 +1,78 @@
+<head>
+    <meta charset="utf-8">
+    <title>Facebook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  </head>
 
-<div class="container">
-<form #registerForm="ngForm" class="center" (ngSubmit)="posts(registerForm.value)">
+<body>
+<div *ngIf="name!=null">
+
+    <div class="container">
+        <div class="wrapper">
+          <section class="post">
+            <header>Create Post</header>
+
+            </section>
+            </div>
+
+    <button class="btn-primary" routerLink="/login" (click)="logout()">Logout</button><br><br>
+    <form #registerForm="ngForm" class="center" (ngSubmit)="posted(registerForm.value)">
+        
+        <input type="text" [(ngModel)]="name" read-only ngModel name="names" id="names" placeholder="Enter Your Name"><br><br>
+        <textarea type="text" class="textarea" ngModel [(ngModel)]="post" name="post" id="post" placeholder="What's on your mind?"></textarea><br><br>
+       <button type="post">POST</button>
+    </form>
     
-    <input type="text" [(ngModel)]="name" read-only ngModel name="name" id="name" placeholder="Enter Your Name"><br><br>
-    <textarea type="text" class="textarea" ngModel [(ngModel)]="post" name="post" id="post" placeholder="post"></textarea><br><br>
-    <input type="submit">
-</form>
-</div>
-
-<div class="container" *ngFor="let post of users | async;let i = index">
-    <div class="jumboron bg-dark text-white center" *ngIf= "post">
-<h1><b> {{post.name}}</b></h1>
-<p>{{post.post}}</p>
-<td  class="high"><button class="btn-primary" (click)="del(post.post)">Delete</button></td>
-<hr>
     </div>
-</div>
+    
+    <br><br><br>
+    <div class="container" *ngFor="let userss of users | async;let i = index">
+        
+           <!-- for admin -->
+       <div *ngIf="name=='admin'">
+        <h1 *ngIf="name=='admin'"><b> {{userss.names}}</b></h1>
+        <p *ngIf="name=='admin'" class="center">{{userss.post}}   <button class="btn-primary" *ngIf="name == 'admin'"  (click)="del(userss.id)">Delete Post</button>
+    </p> </div>
+        
+           <!-- posting -->
+    <div *ngIf="name!='admin'">
+        <br>
+    <h1><b> {{userss.names}}</b></h1>
+        <br>
+    <p class="center">{{userss.post}}     <button class="btn-primary" *ngIf="name == userss.names"  (click)="del(userss.id)">Delete Post</button></p>
+
+       <!-- comment -->
+    <form #comment="ngForm" class="comment" (ngSubmit)="comm(comment.value)" >
+        <input type="text" [(ngModel)]="userss.id" hidden id="id" name="id" ngModel>
+          <input type="text" hidden *ngIf="this.name != ''" style="text-align: center;font-weight: bold;font-size: 2em;" [(ngModel)]="name" readonly ngModel name="name"  class="headinput" id="name" placeholder="Name"><br>
+          <input type="text"  *ngIf="this.name != ''" class="form-control" ngModel  name="post" id="post" placeholder="Write a comment.."><br><br>
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <button id="btn" (click)="getComment(userss.id)">Comments</button>
+      </form>
+
+      
+       <!-- reply -->
+      <form #reply="ngForm" *ngIf="this.replys == true" class="comment-input" (ngSubmit)="rep(reply.value)" >
+        <input type="text" hidden *ngIf="this.name != ''" style="text-align: center;font-weight: bold;font-size: 2em;" [(ngModel)]="name" readonly ngModel name="name"  class="headinput" id="name" placeholder="Name"><br>
+        <input type="text"  *ngIf="this.name != ''" class="form-control" ngModel  name="post" id="post" placeholder="Write a reply.."><br>
+       <input   *ngIf="this.name != ''" type="submit" value="reply">
+    </form>
+
+      <div class="comments">
+        <div *ngFor="let comsec of comments | async;let commentsec = index"><span  *ngIf="userss.id == comsec.postid"><br><br>        
+           <h4 class="name font-weight-bold text-primary hand">{{comsec.name}}</h4> <br class="comment-text">{{comsec.comment}}
+                <button><div  (click)="delcomment(comsec.id)">Delete</div>      </button> <button id="btn" (click)="getReply(comsec.id)">Reply</button>
+      
+                    <div *ngFor="let replysec of reply | async;let replsec = index"><span  *ngIf="userss.id == comsec.postid && comsec.id == replysec.commentid">
+                        <div class="d-flex flex-column ml-2"> <span class="name font-weight-bold text-primary hand">{{replysec.name}}</span> 
+                        <small class="comment-text">{{replysec.reply}}</small>
+                          <button> <div class="d-flex flex-row align-items-center status"
+                                 (click)="delreply(replysec.id)">Delete</div></button> 
+                        </div></span>
+                    </div>
+            
+
+                    <hr>
+
+
+    

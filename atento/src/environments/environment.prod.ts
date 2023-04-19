@@ -1,11 +1,11 @@
 export const environment = {
     firebase: {
-      apiKey: "AIzaSyCUU2Soy6sV6EUPzvxl9ahMayOoHL1aynM",
-      authDomain: "joannaatentomae.firebaseapp.com",
-      projectId: "joannaatentomae",
-      storageBucket: "joannaatentomae.appspot.com",
-      messagingSenderId: "44599430225",
-      appId: "1:44599430225:web:2eae1981b7f7385a873c70"
+      apiKey: "AIzaSyCYVS-n06-Mv8zRmUrS4Vi8k0nqu21YJIE",
+  authDomain: "joannaatento-abc14.firebaseapp.com",
+  projectId: "joannaatento-abc14",
+  storageBucket: "joannaatento-abc14.appspot.com",
+  messagingSenderId: "350192605894",
+  appId: "1:350192605894:web:2814cc3fed5bc2041e55c7"
        },
        
          production: true

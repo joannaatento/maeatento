@@ -12,65 +12,42 @@ import { Observable } from 'rxjs';
 })
 export class LoginComponent implements OnInit{
 
-  users!: Observable<any[]>;
-  constructor(public auth: Auth,public database: Database, private db: AngularFireDatabase,private router:Router) {
-    this.users = db.list('/users').valueChanges();
-   }
+ 
+  constructor(public database:Database,private router:Router) { }
+  
    
   ngOnInit(): void {
 
 
   }
 
+  userlog = ""
+  username = ""
+
   loginUser(value: any) {
 
     //login 
-       signInWithEmailAndPassword(this.auth, value.email, value.password)
-        .then((userCredential) => {
-      
-         const user = userCredential.user;
-
-         alert('user login');
-          const date = new Date();
-          update(ref(this.database, 'users/' + user.uid), {
-
-         last_login: date
-       });
+    const starCountRef = ref(this.database, 'users/' + value.email);
+    onValue(starCountRef, (snapshot) => {
+     const db = snapshot.val();  
+     this.userlog = db.password;
+     this.username = db.username;
+  
+     }); 
 
        this.router.navigate(['/signup'])
       
-  },err=>{
-     alert(err.message)
-  
-   })
-      
-    .catch((error) => {
-     const errorCode = error.code;
-     const errorMessage = error.message;
-    });
-
-    //read user
-
-    //  const starCountRef = ref(this.database, 'users/' + value.email);
-     // onValue(starCountRef, (snapshot) => {
-      //const data = snapshot.val();
-   
-     // alert(data.email);
-   
-      //update user
-
-//update(ref(this.database, 'users/' + value.email), {
-//password: value.password
-//});
-//alert('password updated!');
-
-//remove user
-
-//remove(ref(this.database, 'users/' + value.email));
-//alert('Successfully Removed');
-
-
-  }
-
-  
-}
+       if (this.userlog == value.password){
+        const date = new Date();
+        update(ref(this.database, 'users/' + value.email),{
+        last_login:date
+    } );
+        sessionStorage.setItem('id',value.email);
+    
+        this.router.navigate(['/post'])
+    }else{
+        alert('Please try again');
+    }
+      }
+    
+    }
