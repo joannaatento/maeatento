@@ -17,7 +17,7 @@ export class PostComponent implements OnInit {
   currentpost=""
   currentcomment="";
   comment=false;
-  replys=false;
+  replies=false;
 
   users!: Observable<any[]>;
   comments!: Observable<any[]>;
@@ -52,54 +52,60 @@ this.sent = true;
 
 post = "";
 uid = "";
-    posted(value:any){
-      this.uid = "post" + Math.floor(100000 + Math.random() * 900000);
-      set(ref(this.database, 'post/' + this.uid), {   
-          names: value.names,
-          post: value.post,
-          id: this.uid
+      
+//for posting
+posted(value:any){
+    this.uid = "post" + Math.floor(100000 + Math.random() * 900000);
+    set(ref(this.database, 'post/' + this.uid), {   
+        names: value.names,
+        post: value.post,
+        id: this.uid
    
-         }); 
-         alert('Posted!');
+ }); 
+    alert('Posted!');
 
-        this.post = "";
+    this.post = "";
+ }
+
+ //delete post
+    del(value: any){
+    remove(ref(this.database, 'post/' + value));
+    alert('Deleted Successfully')
+    }
+
+  //logout account
+    logout(){
+    sessionStorage.clear();
         }
 
-        del(value: any){
-          remove(ref(this.database, 'post/' + value));
-          alert('Deleted Successfully')
-        }
-        logout(){
-          sessionStorage.clear();
-        }
+ //for commenting
+  comm(value: any){
+      this.comid = "comment" +Math.floor(100000 + Math.random() * 900000);
+      set(ref(this.database, 'post/'+value.id+'/comment/ '+ this.comid), {   
+      name: value.name,
+      comment: value.post,
+      id: this.comid,
+      postid: value.id,       
+ }); 
+      alert('Successfully Commented!');
+      this.post = "";
 
-        //comment function
+  }
+      
+  //displaying comments
+  getComment(post:any){
+    this.comments = this.FireDb.list('/post/'+post+'/comment/').valueChanges();
+    this.currentpost=post;
+  }
 
-        comm(value: any){
+  //deleting comments
+      delcomment(value: any){
+      remove(ref(this.database, '/post/'+this.currentpost+'/comment/ '+value));
+      alert('Deleted Successfully')
+    }
 
-          this.comid = "comment" +Math.floor(100000 + Math.random() * 900000);
-          set(ref(this.database, 'post/'+value.id+'/comment/ '+ this.comid), {   
-          name: value.name,
-          comment: value.post,
-          id: this.comid,
-          postid: value.id,       
-         }); 
-         alert('Successfully Commented!');
-
-        this.post = "";
-
-        }
-        getComment(post:any){
-          this.comments = this.FireDb.list('/post/'+post+'/comment/').valueChanges();
-          this.currentpost=post;
-       }
-        delcomment(value: any){
-            remove(ref(this.database, '/post/'+this.currentpost+'/comsec/'+ value));
-           alert('Deleted Successfully')
-        }
-
-        //reply function
-        rep(reply:any){
+  //rfor reply
+    replycom(reply:any){
           this.comid = "reply" +Math.floor(100000 + Math.random() * 900000);
           set(ref(this.database, 'post/'+this.currentpost+'/comment/ '+this.currentcomment+'/reply/'+ this.comid), {   
               name: reply.name,
@@ -107,26 +113,26 @@ uid = "";
               id: this.comid,
               postid: this.currentpost,
               commentid: this.currentcomment,         
-             }); 
+  }); 
              alert('Reply Sent');
              this.post = "";
              this.comment=true;
-             this.replys=false;
-        }
-        getReply(reply:any){
+             this.replies=false;
+  }
+
+  //display replies
+      getReply(reply:any){
           this.reply = this.FireDb.list('/post/'+this.currentpost+'/comment/ '+reply+'/reply/').valueChanges();
-   
           this.currentcomment=reply  
-          this.replys=true;
+          this.replies=true;
           this.comment=false;
          
       }
+  //delete repliy
       delreply(value: any){
         remove(ref(this.database, '/post/'+this.currentpost+'/comment/ '+ this.currentcomment+'/reply/'+ value));
         alert('Deleted Successfully')
     }
 
-      
-       }
 
-       
+  }
