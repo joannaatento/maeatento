@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { Observable } from 'rxjs';
-import {  AngularFireDatabase } from '@angular/fire/compat/database';
-import { Database,remove,ref,update, onValue, set} from '@angular/fire/database';
+import {  AngularFireDatabase, AngularFireObject } from '@angular/fire/compat/database';
+import { Database,remove,ref,update, onValue, set, get} from '@angular/fire/database';
+
 
 @Component({
   selector: 'app-post',
@@ -18,10 +19,10 @@ export class PostComponent implements OnInit {
   currentcomment="";
   comment=false;
   replies=false;
-
   users!: Observable<any[]>;
   comments!: Observable<any[]>;
   reply!: Observable<any[]>;
+  likesCount: number = 0;
 
   constructor(public database: Database, private FireDb: AngularFireDatabase) {
   this.users = FireDb.list('/post').valueChanges();
@@ -34,6 +35,7 @@ export class PostComponent implements OnInit {
 });
 
 
+
 if(this.names != ""){
 this.sent = true;
 }else if(this.names == ""){
@@ -43,16 +45,14 @@ this.sent = true;
 }
 
   ngOnInit(): void {
-   
   
-    
   }
+  
 
 
-
-post = "";
-uid = "";
-      
+  post = "";
+  uid = "";
+        
 //for posting
 posted(value:any){
     this.uid = "post" + Math.floor(100000 + Math.random() * 900000);
@@ -104,7 +104,7 @@ posted(value:any){
       alert('Deleted Successfully')
     }
 
-  //rfor reply
+  //for reply
     replycom(reply:any){
           this.comid = "reply" +Math.floor(100000 + Math.random() * 900000);
           set(ref(this.database, 'post/'+this.currentpost+'/comment/ '+this.currentcomment+'/reply/'+ this.comid), {   
@@ -128,11 +128,32 @@ posted(value:any){
           this.comment=false;
          
       }
-  //delete repliy
+  //delete replies
       delreply(value: any){
         remove(ref(this.database, '/post/'+this.currentpost+'/comment/ '+ this.currentcomment+'/reply/'+ value));
         alert('Deleted Successfully')
     }
-
-
+  
+    //like function
+    like(likes: number) {
+      if (likes == null) {
+        likes = 0;
+      }
+      likes++;
+      set(ref(this.database, 'posts/' + this.currentpost + '/likes/value'), likes);
+      set(ref(this.database, 'posts/' + this.currentpost + '/likes/' + this.name), true);
+      this.likesCount = likes; // update the likes count
+    }
+    
+    //unlike function
+    unlike(likes: number) {
+      if (likes == null) {
+        likes = 0;
+      }
+      likes--;
+      set(ref(this.database, 'posts/' + this.currentpost + '/likes'), likes);
+      remove(ref(this.database, 'posts/' + this.currentpost + '/likes/' + this.name));
+      this.likesCount = likes; // update the likes count
+    }
+  
   }

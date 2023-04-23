@@ -41,6 +41,13 @@
        <h1><b> {{userss.names}}</b></h1>
 <br>
        <p class="center">{{userss.post}}     <button class="btn-primary" *ngIf="name == userss.names"  (click)="del(userss.id)">Delete Post</button></p>
+<br>
+<!--like and unlike-->
+<div class="likes-count">{{ likesCount }}
+ <button (click)="like(likesCount)">Like</button>
+<button (click)="unlike(likesCount)">Unlike</button>
+
+</div>
 
 <!-- comment form -->
     <form #comment="ngForm" class="comment" (ngSubmit)="comm(comment.value)" >
