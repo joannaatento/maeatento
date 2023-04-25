@@ -2,6 +2,7 @@ import { Component, OnInit, Input} from '@angular/core';
 import { Observable } from 'rxjs';
 import {  AngularFireDatabase, AngularFireObject } from '@angular/fire/compat/database';
 import { Database,remove,ref,update, onValue, set, get} from '@angular/fire/database';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -134,26 +135,20 @@ posted(value:any){
         alert('Deleted Successfully')
     }
   
-    //like function
-    like(likes: number) {
-      if (likes == null) {
-        likes = 0;
-      }
+    like(post: any) {
+      let likes = post.likes?.value || 0;
       likes++;
-      set(ref(this.database, 'posts/' + this.currentpost + '/likes/value'), likes);
-      set(ref(this.database, 'posts/' + this.currentpost + '/likes/' + this.name), true);
-      this.likesCount = likes; // update the likes count
+      set(ref(this.database, 'post/' + post.id + '/likes/value'), likes);
+      set(ref(this.database, 'post/' + post.id + '/likes/' + this.name), true);
+      post.likes.value = likes;
     }
     
-    //unlike function
-    unlike(likes: number) {
-      if (likes == null) {
-        likes = 0;
-      }
+    unlike(post: any) {
+      let likes = post.likes?.value || 0;
       likes--;
-      set(ref(this.database, 'posts/' + this.currentpost + '/likes'), likes);
-      remove(ref(this.database, 'posts/' + this.currentpost + '/likes/' + this.name));
-      this.likesCount = likes; // update the likes count
+      set(ref(this.database, 'post/' + post.id + '/likes/value'), likes);
+      remove(ref(this.database, 'post/' + post.id + '/likes/' + this.name));
+      post.likes.value = likes;
     }
-  
   }
+    

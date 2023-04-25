@@ -29,7 +29,7 @@
 <br><br><br>
 
     <div class="container" *ngFor="let userss of users | async;let i = index">
-        
+     
 <!-- for admin -->
        <div *ngIf="name=='admin'">
        <h1 *ngIf="name=='admin'"><b> {{userss.names}}</b></h1>
@@ -42,12 +42,14 @@
 <br>
        <p class="center">{{userss.post}}     <button class="btn-primary" *ngIf="name == userss.names"  (click)="del(userss.id)">Delete Post</button></p>
 <br>
-<!--like and unlike-->
-<div class="likes-count">{{ likesCount }}
- <button (click)="like(likesCount)">Like</button>
-<button (click)="unlike(likesCount)">Unlike</button>
+<div *ngFor="let post of users | async">
+    <div>
+    <p>Likes: {{ post.likes?.value || 0 }}</p>
+    <button (click)="like(post)">Like</button>
+    <button (click)="unlike(post)">Unlike</button>
+  </div>
+  
 
-</div>
 
 <!-- comment form -->
     <form #comment="ngForm" class="comment" (ngSubmit)="comm(comment.value)" >
