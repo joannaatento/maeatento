@@ -15,6 +15,7 @@
 
             </section>
             </div>
+
  <!-- logout button -->
         <button class="btn-primary" routerLink="/login" (click)="logout()">Logout</button><br><br>
          
@@ -34,20 +35,18 @@
        <div *ngIf="name=='admin'">
        <h1 *ngIf="name=='admin'"><b> {{userss.names}}</b></h1>
        <p *ngIf="name=='admin'" class="center">{{userss.post}}   <button class="btn-primary" *ngIf="name == 'admin'"  (click)="del(userss.id)">Delete Post</button>
-    </p> </div>
+       </p> </div>
         
        <div *ngIf="name!='admin'">
 <br>
        <h1><b> {{userss.names}}</b></h1>
 <br>
+
        <p class="center">{{userss.post}}     <button class="btn-primary" *ngIf="name == userss.names"  (click)="del(userss.id)">Delete Post</button></p>
        <p>Likes: {{ userss.likes?.value || 0 }}</p>
        <button (click)="like(userss)">Like</button>
        <button (click)="unlike(userss)">Unlike</button>
        <br>
-
-  
-
 
 <!-- comment form -->
     <form #comment="ngForm" class="comment" (ngSubmit)="comm(comment.value)" >
@@ -62,13 +61,11 @@
 <!-- view comments -->
         <div class="d-flex flex-row muted-color"> <button id="btn" (click)="getComment(userss.id)">View Comments</button></div>
 
-    <div class="comments">
+        <div class="comments">
         <div *ngFor="let comsec of comments | async;let commentsec = index"><span  *ngIf="userss.id == comsec.postid"><br><br>        
         <h4 class="name font-weight-bold text-primary hand">{{comsec.name}}</h4> <br class="comment-text">{{comsec.comment}}
         <button><div  (click)="delcomment(comsec.id)">Delete</div>      </button> <button id="btn" (click)="getReply(comsec.id)">Reply</button>
       
-
-
 <!-- reply form -->
       <form #reply="ngForm" *ngIf="this.replies == true" class="comment-input" (ngSubmit)="replycom(reply.value)" >
             <input type="text" hidden *ngIf="this.name != ''" style="text-align: center;font-weight: bold;font-size: 2em;" [(ngModel)]="name" readonly ngModel name="name"  class="headinput" id="name" placeholder="Name"><br>

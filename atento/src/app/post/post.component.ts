@@ -1,6 +1,6 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Observable } from 'rxjs';
-import {  AngularFireDatabase, AngularFireObject } from '@angular/fire/compat/database';
+import {  AngularFireDatabase} from '@angular/fire/compat/database';
 import { Database,remove,ref,update, onValue, set, get} from '@angular/fire/database';
 import { map } from 'rxjs/operators';
 
@@ -12,6 +12,8 @@ import { map } from 'rxjs/operators';
 })
 export class PostComponent implements OnInit {
   name =  sessionStorage.getItem('id');
+  post = "";
+  uid = "";
   data = "";
   names = "";
   sent = true;
@@ -20,15 +22,11 @@ export class PostComponent implements OnInit {
   currentcomment="";
   comment=false;
   replies=false;
-  posts!: Observable<any[]>;
   users!: Observable<any[]>;
   comments!: Observable<any[]>;
   reply!: Observable<any[]>;
   likesCount: number = 0;
 
-
-
- 
 
   constructor(public database: Database, private FireDb: AngularFireDatabase) {
   this.users = FireDb.list('/post').valueChanges();
@@ -41,8 +39,6 @@ export class PostComponent implements OnInit {
 
 });
 
-
-
 if(this.names != ""){
 this.sent = true;
 }else if(this.names == ""){
@@ -54,12 +50,7 @@ this.sent = true;
   ngOnInit(): void {
   
   }
-  
-
-
-  post = "";
-  uid = "";
-        
+      
 //for posting
 posted(value:any){
     this.uid = "post" + Math.floor(100000 + Math.random() * 900000);
@@ -70,22 +61,21 @@ posted(value:any){
    
  }); 
     alert('Posted!');
-
     this.post = "";
  }
 
- //delete post
+//delete post
     del(value: any){
     remove(ref(this.database, 'post/' + value));
     alert('Deleted Successfully')
     }
 
-  //logout account
+//logout account
     logout(){
     sessionStorage.clear();
         }
 
- //for commenting
+//for commenting
   comm(value: any){
       this.comid = "comment" +Math.floor(100000 + Math.random() * 900000);
       set(ref(this.database, 'post/'+value.id+'/comment/ '+ this.comid), {   
@@ -99,19 +89,19 @@ posted(value:any){
 
   }
       
-  //displaying comments
+//displaying comments
   getComment(post:any){
     this.comments = this.FireDb.list('/post/'+post+'/comment/').valueChanges();
     this.currentpost=post;
   }
 
-  //deleting comments
+//deleting comments
       delcomment(value: any){
       remove(ref(this.database, '/post/'+this.currentpost+'/comment/ '+value));
       alert('Deleted Successfully')
     }
 
-  //for reply
+//for reply
     replycom(reply:any){
           this.comid = "reply" +Math.floor(100000 + Math.random() * 900000);
           set(ref(this.database, 'post/'+this.currentpost+'/comment/ '+this.currentcomment+'/reply/'+ this.comid), {   
@@ -127,20 +117,22 @@ posted(value:any){
              this.replies=false;
   }
 
-  //display replies
+//display replies
       getReply(reply:any){
           this.reply = this.FireDb.list('/post/'+this.currentpost+'/comment/ '+reply+'/reply/').valueChanges();
           this.currentcomment=reply  
           this.replies=true;
           this.comment=false;
          
-      }
-  //delete replies
+  }
+
+//delete replies
       delreply(value: any){
         remove(ref(this.database, '/post/'+this.currentpost+'/comment/ '+ this.currentcomment+'/reply/'+ value));
         alert('Deleted Successfully')
-    }
+  }
   
+  //like function
     like(userss: any) {
       let likes = userss.likes?.value || 0;
       likes++;
@@ -148,6 +140,7 @@ posted(value:any){
       this.likesCount = likes;
     }
     
+  //unlike function
     unlike(userss: any) {
       let likes = userss.likes?.value || 0;
       likes--;
