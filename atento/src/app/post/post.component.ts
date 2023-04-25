@@ -20,13 +20,19 @@ export class PostComponent implements OnInit {
   currentcomment="";
   comment=false;
   replies=false;
+  posts!: Observable<any[]>;
   users!: Observable<any[]>;
   comments!: Observable<any[]>;
   reply!: Observable<any[]>;
   likesCount: number = 0;
 
+
+
+ 
+
   constructor(public database: Database, private FireDb: AngularFireDatabase) {
   this.users = FireDb.list('/post').valueChanges();
+  this.name = sessionStorage.getItem('id');
 
   const starCountRef = ref(this.database, 'users/' + this.names);
     onValue(starCountRef, (snapshot) => {
@@ -135,20 +141,21 @@ posted(value:any){
         alert('Deleted Successfully')
     }
   
-    like(post: any) {
-      let likes = post.likes?.value || 0;
+    like(userss: any) {
+      let likes = userss.likes?.value || 0;
       likes++;
-      set(ref(this.database, 'post/' + post.id + '/likes/value'), likes);
-      set(ref(this.database, 'post/' + post.id + '/likes/' + this.name), true);
-      post.likes.value = likes;
+      set(ref(this.database, 'post/' + userss.id + '/likes/value'), likes);
+      this.likesCount = likes;
     }
     
-    unlike(post: any) {
-      let likes = post.likes?.value || 0;
+    unlike(userss: any) {
+      let likes = userss.likes?.value || 0;
       likes--;
-      set(ref(this.database, 'post/' + post.id + '/likes/value'), likes);
-      remove(ref(this.database, 'post/' + post.id + '/likes/' + this.name));
-      post.likes.value = likes;
+      set(ref(this.database, 'post/' + userss.id +  '/likes/value'), likes);
+      remove(ref(this.database, 'post/' + userss.id + '/likes/' + this.name));
+      this.likesCount = likes;
     }
+ 
+     
   }
     

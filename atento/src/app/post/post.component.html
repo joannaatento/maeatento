@@ -41,13 +41,11 @@
        <h1><b> {{userss.names}}</b></h1>
 <br>
        <p class="center">{{userss.post}}     <button class="btn-primary" *ngIf="name == userss.names"  (click)="del(userss.id)">Delete Post</button></p>
-<br>
-<div *ngFor="let post of users | async">
-    <div>
-    <p>Likes: {{ post.likes?.value || 0 }}</p>
-    <button (click)="like(post)">Like</button>
-    <button (click)="unlike(post)">Unlike</button>
-  </div>
+       <p>Likes: {{ userss.likes?.value || 0 }}</p>
+       <button (click)="like(userss)">Like</button>
+       <button (click)="unlike(userss)">Unlike</button>
+       <br>
+
   
 
 
