@@ -11,36 +11,46 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit{
-    ab = "";
-  constructor(public auth: Auth, public database: Database, private router: Router){}
+  
+  constructor( public database:Database,private router:Router)  { }
   ngOnInit(): void {}
-  
 
-  registerUser(value: any) {
 
-  const starCountRef = ref(this.database, 'users/' + value.email);
-    onValue(starCountRef, (snapshot) => {
-     const db = snapshot.val();  
-     this.ab = db.email
- 
-     }); 
+  uid = "";
+  multiple = "";
   
+    registerUser(value:any){
+  
+      const starCountRef = ref(this.database, 'users/' + value.email);
+      onValue(starCountRef, (snapshot) => {
+       const dbase = snapshot.val();  
+     this.multiple = dbase.email
+   
+       }); 
+    
+        
+       if (  value.email == null || value.email == "" || value.password == null || value.password == "" 
+        ||  value.username == null || value.username == "" 
+        ){
+         
+        alert('Fill the form ');
+       }else{
+        if(this.multiple == value.email){
+         alert('user email already exist!'); 
+        }
+    
+          
+        else {
+
+          this.uid = "user" +Math.floor(100000 + Math.random() * 900000);
+            set(ref(this.database, 'users/' + value.email), {
+          id: this.uid,
+          username: value.username,
+          email: value.email,
+          password: value.password,
       
-     if (  value.email == null || value.email == "" || value.password == null || value.password == "" 
-      ){
-      alert('Fill the form ');
-     }else{
-      if(this.ab == value.email){
-       alert('user email already exist!'); 
-      }
-  
-        
-      else {
-        
-    set(ref(this.database, 'users/' + value.email), {
-        email: value.email,
-        password: value.password
-  
+    
+    
   
        }); 
        alert('account created!');
@@ -49,30 +59,3 @@ export class RegisterComponent implements OnInit{
      }
   }
 }
-
-//   registerUser(value: any) {
-//     createUserWithEmailAndPassword(this.auth, value.email, value.password)
-//       .then((userCredential) => {
-      
-//         const user = userCredential.user;
-
-//         update(ref(this.database, 'users/' + user.uid), {
-//           email: value.email,
-//           password: value.password,
-//           id: user.uid
-//         });
-
-//         alert('user created! ');
-//         // ...
-//       })
-//       .catch((error) => {
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-
-//         alert(errorMessage);
-//         // ..
-//       });
-//   }
-// }
-
-

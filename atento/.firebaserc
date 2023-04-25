@@ -1,4 +1,8 @@
 {
+  "projects": {
+    "default": "joannaatentomae",
+    "joannaatentomae": "joannaatentomae"
+  },
   "targets": {
     "joannamae-991f2": {
       "hosting": {
@@ -15,7 +19,5 @@
       }
     }
   },
-  "projects": {
-    "default": "joannamae-6f651"
-  }
+  "etags": {}
 }
