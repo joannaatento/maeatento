@@ -2,8 +2,6 @@ import { Component, OnInit} from '@angular/core';
 import { Observable } from 'rxjs';
 import {  AngularFireDatabase} from '@angular/fire/compat/database';
 import { Database,remove,ref,update, onValue, set, get} from '@angular/fire/database';
-import { map } from 'rxjs/operators';
-
 
 @Component({
   selector: 'app-post',
@@ -133,22 +131,35 @@ posted(value:any){
   }
   
   //like function
-    like(userss: any) {
-      let likes = userss.likes?.value || 0;
+  like(userss: any) {
+    let likes = userss.likes?.value || 0;
+    let likedBy = userss.likes?.likedBy || [];
+  
+    if (!likedBy.includes(this.name)) {
       likes++;
+      likedBy.push(this.name);
+  
       set(ref(this.database, 'post/' + userss.id + '/likes/value'), likes);
+      set(ref(this.database, 'post/' + userss.id + '/likes/likedBy'), likedBy);
+  
       this.likesCount = likes;
     }
-    
-  //unlike function
-    unlike(userss: any) {
-      let likes = userss.likes?.value || 0;
-      likes--;
-      set(ref(this.database, 'post/' + userss.id +  '/likes/value'), likes);
-      remove(ref(this.database, 'post/' + userss.id + '/likes/' + this.name));
-      this.likesCount = likes;
-    }
- 
-     
   }
-    
+  
+  //unlike function
+  unlike(userss: any) {
+    let likes = userss.likes?.value || 0;
+    let likedBy = userss.likes?.likedBy || [];
+
+    if (likedBy.includes(this.name)) {
+      likes--;
+      likedBy = likedBy.filter((name: string) => name !== this.name);
+  
+      set(ref(this.database, 'post/' + userss.id + '/likes/value'), likes);
+      set(ref(this.database, 'post/' + userss.id + '/likes/likedBy'), likedBy);
+  
+      this.likesCount = likes;
+    }
+  }
+  
+}   
